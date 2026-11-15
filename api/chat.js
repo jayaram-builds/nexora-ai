@@ -41,7 +41,8 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ reply: reply || "No response received." });
 
-  } catch (error) {
-    return res.status(500).json({ error: "Server error" });
-  }
+} catch (error) {
+  return res.status(500).json({
+    error: error.message || "Server error"
+  });
 }
