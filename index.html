@@ -1,185 +1,195 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#050b18">
   <title>Nexora AI</title>
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #050b18;
-      color: #eaf5ff;
+      background: #101522;
+      color: white;
       min-height: 100vh;
-    }
-    header {
-      padding: 20px;
-      border-bottom: 1px solid #18314b;
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 12px;
+      padding: 15px;
     }
-    .logo {
-      color: #38d9ff;
-      font-size: 25px;
-      font-weight: bold;
-      text-shadow: 0 0 15px #00bfff;
-    }
-    .status { color: #7e9bb5; font-size: 12px; }
-    main {
-      max-width: 750px;
-      margin: 0 auto;
-      padding: 35px 18px;
-    }
-    .welcome { text-align: center; margin: 55px 0 35px; }
-    h1 {
-      font-size: 38px;
-      margin-bottom: 12px;
-      background: linear-gradient(90deg,#36d9ff,#8b7cff);
-      color: transparent;
-      background-clip: text;
-    }
-    .welcome p { color: #91a9c2; line-height: 1.6; }
-    #chat {
+
+    .app {
+      width: 100%;
+      max-width: 600px;
+      height: 85vh;
+      background: #1b2333;
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      margin-bottom: 20px;
+      overflow: hidden;
+      border: 1px solid #34415a;
     }
+
+    header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #34415a;
+    }
+
+    header h1 {
+      margin: 0;
+      color: #70a5ff;
+    }
+
+    header p {
+      color: #aab5c8;
+      margin-bottom: 0;
+    }
+
+    #chat {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
     .message {
-      padding: 14px 16px;
-      border-radius: 14px;
-      max-width: 90%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border-radius: 12px;
+      max-width: 85%;
       line-height: 1.5;
       white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
+
     .user {
-      align-self: flex-end;
-      background: #123b5a;
-      border: 1px solid #1679a8;
+      background: #2864d7;
+      margin-left: auto;
     }
+
     .bot {
-      align-self: flex-start;
-      background: #101d30;
-      border: 1px solid #21415d;
+      background: #303c51;
+      margin-right: auto;
     }
-    .input-area {
+
+    form {
       display: flex;
-      gap: 10px;
-      padding: 10px;
-      background: #0d1929;
-      border: 1px solid #245174;
-      border-radius: 15px;
-      box-shadow: 0 0 18px #008cff18;
+      gap: 8px;
+      padding: 15px;
+      border-top: 1px solid #34415a;
     }
+
     input {
       flex: 1;
       min-width: 0;
-      padding: 12px;
-      color: white;
-      background: transparent;
+      padding: 14px;
       border: none;
       outline: none;
-      font-size: 15px;
+      border-radius: 10px;
+      background: #303c51;
+      color: white;
+      font-size: 16px;
     }
+
     button {
-      padding: 12px 19px;
+      padding: 0 18px;
       border: none;
       border-radius: 10px;
-      background: #16bce9;
-      color: #00121e;
-      font-weight: bold;
+      background: #3978ed;
+      color: white;
+      font-size: 16px;
       cursor: pointer;
     }
-    button:hover { background: #72e4ff; }
-    footer {
-      text-align: center;
-      color: #58728c;
-      font-size: 12px;
-      padding: 25px;
-    }
-    @media(max-width: 480px) {
-      h1 { font-size: 31px; }
-      main { padding-top: 15px; }
-      .welcome { margin-top: 45px; }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="logo">✦ Nexora AI</div>
-    <div class="status">Your AI workspace</div>
-  </header>
+  <main class="app">
+    <header>
+      <h1>Nexora AI</h1>
+      <p>Your personal AI assistant</p>
+    </header>
 
-  <main>
-    <section class="welcome">
-      <h1>Welcome to Nexora AI</h1>
-      <p>Your ideas. Your intelligence. Your future.<br>
-      Start a conversation below.</p>
-    </section>
+    <div id="chat" aria-live="polite">
+      <div class="message bot">
+        Hello! I'm Nexora AI. How can I help you today?
+      </div>
+    </div>
 
-    <section id="chat" aria-live="polite"></section>
-
-    <form class="input-area" id="chatForm">
-      <input id="messageInput" type="text"
-        placeholder="Ask Nexora anything..." autocomplete="off">
-      <button type="submit">Send ➤</button>
+    <form id="chatForm">
+      <input
+        id="messageInput"
+        type="text"
+        placeholder="Ask Nexora AI anything..."
+        autocomplete="off"
+        required
+      >
+      <button id="sendButton" type="submit">Send</button>
     </form>
   </main>
 
-  <footer>© 2026 Nexora AI · Built for the future 🚀</footer>
-
   <script>
-    
-<script>
-  const form = document.getElementById("chatForm");
-  const input = document.getElementById("messageInput");
-  const chat = document.getElementById("chat");
+    const form = document.getElementById("chatForm");
+    const input = document.getElementById("messageInput");
+    const chat = document.getElementById("chat");
+    const sendButton = document.getElementById("sendButton");
 
-  form.addEventListener("submit", async function(event) {
-    event.preventDefault();
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
 
-    const message = input.value.trim();
-    if (!message) return;
+      const message = input.value.trim();
 
-    addMessage(message, "user");
-    input.value = "";
+      if (!message || sendButton.disabled) return;
 
-    const loading = addMessage("Thinking...", "bot");
+      addMessage(message, "user");
+      input.value = "";
+      sendButton.disabled = true;
 
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message })
-      });
+      const loading = addMessage("Thinking...", "bot");
 
-      const data = await response.json();
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message: message })
+        });
 
-      if (!response.ok) {
-        throw new Error(data.error || "Something went wrong.");
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Request failed.");
+        }
+
+        loading.textContent =
+          data.reply || "No response received.";
+
+      } catch (error) {
+        loading.textContent = "Error: " + error.message;
+      } finally {
+        sendButton.disabled = false;
+        input.focus();
       }
+    });
 
-      loading.textContent = data.reply || "No response received.";
-
-    } catch (error) {
-      loading.textContent = "Error: " + error.message;
-    }
-  });
-
-  function addMessage(text, type) {
-    const div = document.createElement("div");
-    div.className = "message " + type;
-    div.textContent = text;
-    chat.appendChild(div);
-    return div;
-  }
-</script>
-
+    function addMessage(text, type) {
+      const div = document.createElement("div");
+      div.className = "message " + type;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+      return div;
     }
   </script>
 </body>
